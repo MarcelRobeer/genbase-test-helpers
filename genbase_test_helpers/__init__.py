@@ -108,7 +108,7 @@ class DeterministicTextClassifier(AbstractClassifier):
 
 from typing import Union  # noqa: E402
 
-from string import printable, punctuation  # noqa: E402
+from string import ascii_lowercase, digits, printable, punctuation  # noqa: E402
 import random  # noqa: E402
 import itertools  # noqa: E402
 
@@ -138,14 +138,14 @@ def predict_fn(instance: str) -> np.ndarray:
 TEST_MODEL = DeterministicTextClassifier.from_callable(predict_fn, ["punctuation", "no_punctuation"])
 
 
-def corrupt(strings: Union[Iterable[str], str]) -> Union[Iterable[str], str]:
+def corrupt(names: Union[Iterable[str], str]) -> Union[Iterable[str], str]:
     """Corrupt name of string(s)."""
-    def corrupt_one(string):
-        return f'{random.choice(string.ascii_lowercase)}{string}'
+    def corrupt_one(name):
+        return f'{random.choice(ascii_lowercase + digits)}{name}'
 
-    if isinstance(strings, Iterable):
-        return [corrupt_one(s) for s in strings]
-    return corrupt_one(strings)
+    if isinstance(names, Iterable):
+        return [corrupt_one(s) for s in names]
+    return corrupt_one(names)
 
 
 def random_combinations(iterable: Iterable[Any], start: int = 1):
