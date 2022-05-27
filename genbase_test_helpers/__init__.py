@@ -106,7 +106,11 @@ class DeterministicTextClassifier(AbstractClassifier):
 # Actual code for pytest
 # =========================
 
+from typing import Union  # noqa: E402
+
 from string import printable, punctuation  # noqa: E402
+import random  # noqa: E402
+import itertools  # noqa: E402
 
 from instancelib import TextEnvironment  # noqa: E402
 
@@ -132,3 +136,24 @@ def predict_fn(instance: str) -> np.ndarray:
 
 
 TEST_MODEL = DeterministicTextClassifier.from_callable(predict_fn, ["punctuation", "no_punctuation"])
+
+
+def corrupt(strings: Union[Iterable[str], str]) -> Union[Iterable[str], str]:
+    """Corrupt name of string(s)."""
+    def corrupt_one(string):
+        return f'{random.choice(string.ascii)}{string}'
+
+    if isinstance(strings, Iterable):
+        return [corrupt_one(s) for s in strings]
+    return corrupt_one(strings)
+
+
+def random_combinations(iterable: Iterable[Any], start: int = 1):
+    """Create random combinations of lengths start to length iterable."""
+    pool = tuple(iterable)
+    start = min(len(pool), max(0, start))
+
+    def random_combination(r: int = 1):
+        return [pool[i] for i in sorted(random.sample(range(len(pool)), r))]
+
+    return [random_combination(i) for i in range(start, len(pool) + 1)]
