@@ -108,7 +108,6 @@ class DeterministicTextClassifier(AbstractClassifier):
 
 from string import printable, punctuation  # noqa: E402
 
-import pytest  # noqa: E402
 from instancelib import TextEnvironment  # noqa: E402
 
 TEST_INSTANCES = list(printable)
