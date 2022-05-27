@@ -141,7 +141,7 @@ TEST_MODEL = DeterministicTextClassifier.from_callable(predict_fn, ["punctuation
 def corrupt(strings: Union[Iterable[str], str]) -> Union[Iterable[str], str]:
     """Corrupt name of string(s)."""
     def corrupt_one(string):
-        return f'{random.choice(string.ascii)}{string}'
+        return f'{random.choice(string.ascii_lowercase)}{string}'
 
     if isinstance(strings, Iterable):
         return [corrupt_one(s) for s in strings]
